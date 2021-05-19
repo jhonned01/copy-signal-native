@@ -1,14 +1,29 @@
-import React, { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Alert, KeyboardAvoidingView } from "react-native";
 import { StatusBar } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Input, Image } from "react-native-elements";
+import { auth } from "../firebase";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const SignUn = () => {};
+  useEffect(() => {
+    const unSubscribe = auth.onAuthStateChanged((authUser) => {
+      console.log(authUser);
+      if (authUser) {
+        navigation.replace("Home");
+      }
+    });
+    return unSubscribe;
+  }, []);
+
+  const SignUn = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .catch((error) => Alert.alert(error.message));
+  };
 
   const Register = () => {
     navigation.navigate("Register");
@@ -27,13 +42,16 @@ const LoginScreen = ({ navigation }) => {
           placeholder="Email"
           autoFocus
           type="email"
-          onChange={(text) => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
         />
         <Input
           placeholder="Password"
           secureTextEntry
           type="password"
-          onChange={(text) => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+          onSubmitEditing={SignUn}
         />
       </View>
       <Button containerStyle={styles.button} onPress={SignUn} title="Login" />

@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect } from "react";
-import { StatusBar } from "react-native";
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import { Alert, StatusBar } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "react-native-elements";
@@ -12,7 +12,7 @@ const RegisterScreen = ({ navigation }) => {
   const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
-    const unSubscribe = auth.onAuthStateChange((authUser) => {
+    const unSubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         navigation.replace("Home");
       }
@@ -23,15 +23,15 @@ const RegisterScreen = ({ navigation }) => {
   const register = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        authUser.user.update({
+      .then((userCredential) => {
+        userCredential.user.updateProfile({
           displayName: name,
           photoURL:
             imageUrl ||
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcencup.com%2Favatar-placeholder%2F&psig=AOvVaw0Ip1qdwOR_oWDiibg_nWYR&ust=1621405945120000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIjNwP3N0vACFQAAAAAdAAAAABAD",
+            "https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
         });
       })
-      .catch((error) => alert(error.menssage));
+      .catch((error) => Alert.alert(error.message));
   };
 
   useLayoutEffect(() => {

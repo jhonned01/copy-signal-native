@@ -1,7 +1,6 @@
-import * as firebase from "firebase";
+import firebase from "firebase";
 import "firebase/firestore";
 import "firebase/auth";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 const firebaseConfig = {
   apiKey: "AIzaSyC8cgUaekwknUnq3Eckaw1mJ-4qeiCqjZk",
   authDomain: "signal-clo-49a39.firebaseapp.com",
